@@ -1,0 +1,112 @@
+[
+    {
+        "id": "1",
+        "name": "Nairobi Java House",
+        "category": "Cafe",
+        "services": [
+            "Coffee",
+            "Breakfast",
+            "Lunch",
+            "Pastries"
+        ],
+        "location": "Mama Ngina St, Nairobi CBD",
+        "phone": "+254 711 123 456",
+        "whatsapp": "+254 711 123 456",
+        "description": "Nairobi's favorite coffee house since 1999. Enjoy our famous export-quality coffee and hearty meals.",
+        "trustStatus": "verified",
+        "rating": 4.5,
+        "reviewCount": 120,
+        "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=500&auto=format&fit=crop"
+    },
+    {
+        "id": "2",
+        "name": "QuickFix Plumbers",
+        "category": "Plumber",
+        "services": [
+            "Leak Repair",
+            "Drain Cleaning",
+            "Installation"
+        ],
+        "location": "Kilimani, Nairobi",
+        "phone": "+254 722 987 654",
+        "whatsapp": "+254 722 987 654",
+        "description": "Professional plumbing services available 24/7. Trusted by hundreds of homes in Nairobi.",
+        "trustStatus": "verified",
+        "rating": 4.8,
+        "reviewCount": 45,
+        "image": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=500&auto=format&fit=crop"
+    },
+    {
+        "id": "3",
+        "name": "Mama Oliech Restaurant",
+        "category": "Restaurant",
+        "services": [
+            "Traditional Fish",
+            "Ugali",
+            "Greens"
+        ],
+        "location": "Marcus Garvey Rd, Kilimani",
+        "phone": "+254 733 555 111",
+        "whatsapp": "",
+        "description": "Famous for the best fresh tilapia and traditional Kenyan cuisine in a relaxed setting.",
+        "trustStatus": "claimed",
+        "rating": 4.6,
+        "reviewCount": 350,
+        "image": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=500&auto=format&fit=crop"
+    },
+    {
+        "id": "4",
+        "name": "City Mechanic Shop",
+        "category": "Automotive",
+        "services": [
+            "Engine Service",
+            "Tyre Change",
+            "Diagnostics"
+        ],
+        "location": "Industrial Area, Nairobi",
+        "phone": "+254 700 000 000",
+        "whatsapp": "+254 700 000 000",
+        "description": "Expert car repair and maintenance for all vehicle models. Authentic spare parts guaranteed.",
+        "trustStatus": "unverified",
+        "rating": 3.9,
+        "reviewCount": 12,
+        "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=500&auto=format&fit=crop"
+    },
+    {
+        "id": "5",
+        "name": "Elegant Saloon",
+        "category": "Beauty & Spa",
+        "services": [
+            "Haircut",
+            "Manicure",
+            "Pedicure",
+            "Massage"
+        ],
+        "location": "Westlands, Nairobi",
+        "phone": "+254 712 345 678",
+        "whatsapp": "+254 712 345 678",
+        "description": "Luxury beauty experiences. Relax and rejuvenate with our professional stylists and therapists.",
+        "trustStatus": "verified",
+        "rating": 4.9,
+        "reviewCount": 88,
+        "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=500&auto=format&fit=crop"
+    },
+    {
+        "id": "6",
+        "name": "Tech Hub Graphics",
+        "category": "Designers",
+        "services": [
+            "Logo Design",
+            "Branding",
+            "Web Design"
+        ],
+        "location": "Moi Avenue, CBD",
+        "phone": "+254 750 654 321",
+        "whatsapp": "+254 750 654 321",
+        "description": "Creative design solutions for your business. We bring your brand to life.",
+        "trustStatus": "unverified",
+        "rating": 4.2,
+        "reviewCount": 5,
+        "image": "https://images.unsplash.com/photo-1626785774573-4b799314346d?q=80&w=500&auto=format&fit=crop"
+    }
+]
