@@ -2,44 +2,31 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-                <h2 className="text-3xl font-bold text-center mb-6">Create Business Account</h2>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-center mb-4">Register Your Business</h2>
 
-                <form className="space-y-4">
-                    <input
-                        type="text"
-                        placeholder="Business Name"
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+        <form className="space-y-4">
+          <input className="w-full border px-4 py-3 rounded-md" placeholder="Business Name" />
+          <input className="w-full border px-4 py-3 rounded-md" placeholder="Email" />
+          <input className="w-full border px-4 py-3 rounded-md" placeholder="Phone" />
+          <input className="w-full border px-4 py-3 rounded-md" type="password" placeholder="Password" />
 
-                    <input
-                        type="email"
-                        placeholder="Business Email"
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+          <button className="w-full bg-green-700 text-white py-3 rounded-md font-semibold">
+            Create Account
+          </button>
+        </form>
 
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-
-                    <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                        Sign Up
-                    </button>
-                </form>
-
-                <p className="text-center text-sm mt-4 text-gray-600">
-                    Already have an account?{" "}
-                    <Link to="/business/login" className="text-blue-600 font-medium">
-                        Login
-                    </Link>
-                </p>
-            </div>
-        </div>
-    );
+        <p className="text-sm text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/business/login" className="text-green-700 font-semibold">
+            Login
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default Signup;

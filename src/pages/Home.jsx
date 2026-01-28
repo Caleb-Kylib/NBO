@@ -79,16 +79,18 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-50 border-t border-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Are you a business owner?</h2>
-          <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-            List your business on Nairobiz to reach more customers and grow your brand online.
-          </p>
-          <button className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg">
-            List Your Business Now
-          </button>
-        </div>
-      </section>
+  <div className="container mx-auto px-4 text-center">
+    <h2 className="text-3xl font-bold text-gray-900 mb-4">Are you a business owner?</h2>
+    <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+      List your business on Nairobiz to reach more customers and grow your brand online.
+    </p>
+    <Link to="/business/login">
+      <button className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg">
+        List Your Business Now
+      </button>
+    </Link>
+  </div>
+</section>
 
     </div>
   );
