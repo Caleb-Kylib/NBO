@@ -9,6 +9,9 @@ import Categories from './pages/Categories';
 import BusinessProfile from './pages/BusinessProfile';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Login from "./pages/business/Login";
+import Signup from "./pages/business/Signup";
+import Dashboard from "./pages/business/Dashboard";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -25,12 +28,15 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       <Navbar />
-      <main className="flex-grow">
+      <main className="grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/business/:id" element={<BusinessProfile />} />
+          <Route path="/business/login" element={<Login />} />
+          <Route path="/business/signup" element={<Signup />} />
+          <Route path="/business/dashboard" element={<Dashboard />} />
         </Routes>
       </main>
       <Footer />

@@ -10,7 +10,7 @@ const categories = ["Plumber", "Restaurant", "Mechanic", "Beauty & Spa", "Design
 
 const Home = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
 
       {/* Hero Section */}
       <section
