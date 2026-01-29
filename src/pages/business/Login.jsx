@@ -63,16 +63,7 @@ const Login = () => {
                     </button>
                 </form>
 
-                {/* Social */}
-                <div className="mt-6 text-center text-sm text-gray-300">
-                    Connect with Social Networks
-                </div>
 
-                <div className="flex justify-center mt-4">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
-                        Facebook
-                    </button>
-                </div>
             </div>
         </div>
     );

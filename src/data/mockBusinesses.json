@@ -20,21 +20,21 @@
     },
     {
         "id": "2",
-        "name": "QuickFix Plumbers",
-        "category": "Plumber",
+        "name": "GoodLife Pharmacy",
+        "category": "Pharmacy & Health Stores",
         "services": [
-            "Leak Repair",
-            "Drain Cleaning",
-            "Installation"
+            "Prescriptions",
+            "Over-the-counter Meds",
+            "Wellness Consultations"
         ],
-        "location": "Kilimani, Nairobi",
+        "location": "Sarit Centre, Westlands",
         "phone": "+254 722 987 654",
         "whatsapp": "+254 722 987 654",
-        "description": "Professional plumbing services available 24/7. Trusted by hundreds of homes in Nairobi.",
+        "description": "Your trusted partner in health and wellness. We provide a wide range of pharmaceutical products and expert advice.",
         "trustStatus": "verified",
         "rating": 4.8,
-        "reviewCount": 45,
-        "image": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=500&auto=format&fit=crop"
+        "reviewCount": 145,
+        "image": "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=500&auto=format&fit=crop"
     },
     {
         "id": "3",
@@ -56,21 +56,21 @@
     },
     {
         "id": "4",
-        "name": "City Mechanic Shop",
-        "category": "Automotive",
+        "name": "The French Corner Bakery",
+        "category": "Bakeries",
         "services": [
-            "Engine Service",
-            "Tyre Change",
-            "Diagnostics"
+            "Fresh Bread",
+            "Custom Cakes",
+            "Pastries"
         ],
-        "location": "Industrial Area, Nairobi",
+        "location": "Village Market, Gigiri",
         "phone": "+254 700 000 000",
         "whatsapp": "+254 700 000 000",
-        "description": "Expert car repair and maintenance for all vehicle models. Authentic spare parts guaranteed.",
-        "trustStatus": "unverified",
-        "rating": 3.9,
-        "reviewCount": 12,
-        "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=500&auto=format&fit=crop"
+        "description": "Artisan breads and pastries baked fresh daily. Specializing in authentic French baguettes and decadent desserts.",
+        "trustStatus": "verified",
+        "rating": 4.7,
+        "reviewCount": 82,
+        "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=500&auto=format&fit=crop"
     },
     {
         "id": "5",

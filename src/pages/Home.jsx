@@ -6,7 +6,20 @@ import CategoryCard from "../components/ui/CategoryCard";
 import { motion } from "framer-motion";
 import nairobiImg from "../assets/nairobi.jpg";
 
-const categories = ["Plumber", "Restaurant", "Mechanic", "Beauty & Spa", "Designers", "Cafe", "Real Estate", "Services"];
+const categories = [
+  "Pharmacy & Health Stores",
+  "Bakeries",
+  "Butcheries",
+  "Wine & Beverage Shops",
+  "Bookshops",
+  "Stationery & Office Supplies",
+  "Restaurant",
+  "Beauty & Spa",
+  "Designers",
+  "Cafe",
+  "Real Estate",
+  "Services"
+];
 
 const Home = () => {
   return (
@@ -49,9 +62,9 @@ const Home = () => {
           {/* Popular Links */}
           <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-300">
             <span>Popular:</span>
-            <Link to="/search?category=Plumber" className="hover:text-white underline">Plumbers</Link>
+            <Link to="/search?category=Pharmacy %26 Health Stores" className="hover:text-white underline">Pharmacies</Link>
             <Link to="/search?category=Restaurant" className="hover:text-white underline">Restaurants</Link>
-            <Link to="/search?category=Mechanic" className="hover:text-white underline">Mechanics</Link>
+            <Link to="/search?category=Bakeries" className="hover:text-white underline">Bakeries</Link>
           </div>
         </div>
       </section>
@@ -79,18 +92,18 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-50 border-t border-gray-100">
-  <div className="container mx-auto px-4 text-center">
-    <h2 className="text-3xl font-bold text-gray-900 mb-4">Are you a business owner?</h2>
-    <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-      List your business on Nairobiz to reach more customers and grow your brand online.
-    </p>
-    <Link to="/business/login">
-      <button className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg">
-        List Your Business Now
-      </button>
-    </Link>
-  </div>
-</section>
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Are you a business owner?</h2>
+          <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+            List your business on Nairobiz to reach more customers and grow your brand online.
+          </p>
+          <Link to="/business/login">
+            <button className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-lg">
+              List Your Business Now
+            </button>
+          </Link>
+        </div>
+      </section>
 
     </div>
   );

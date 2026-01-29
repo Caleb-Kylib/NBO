@@ -2,7 +2,20 @@
 import React from 'react';
 import CategoryCard from '../components/ui/CategoryCard';
 
-const categories = ["Plumber", "Restaurant", "Mechanic", "Beauty & Spa", "Designers", "Cafe", "Real Estate", "Services"];
+const categories = [
+    "Pharmacy & Health Stores",
+    "Bakeries",
+    "Butcheries",
+    "Wine & Beverage Shops",
+    "Bookshops",
+    "Stationery & Office Supplies",
+    "Restaurant",
+    "Beauty & Spa",
+    "Designers",
+    "Cafe",
+    "Real Estate",
+    "Services"
+];
 
 const Categories = () => {
     return (
