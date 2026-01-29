@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabaseClient";
 import nairobiImg from "../../assets/nairobi.jpg";
 import SuccessModal from "../../components/ui/SuccessModal";
+import { toast } from "react-hot-toast";
 
 const Signup = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { registerBusiness, loginBusiness } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -25,24 +25,35 @@ const Signup = () => {
     setError("");
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      const result = registerBusiness(formData.email, formData.password, formData.businessName);
+    try {
+      // 1. Sign up user
+      const { data: { user }, error: signupError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            business_name: formData.businessName,
+            phone: formData.phone
+          }
+        }
+      });
 
-      if (result.success) {
-        // Automatically login after signup
-        loginBusiness(formData.email, formData.password);
-        setIsLoading(false);
-        setShowSuccess(true);
-      } else {
-        setIsLoading(false);
-        setError(result.message);
-      }
-    }, 1200);
+      if (signupError) throw signupError;
+
+      toast.success("Account created successfully!");
+      setShowSuccess(true);
+    } catch (err) {
+      console.error("Signup Error:", err);
+      setError(err.message || "Could not create account");
+      toast.error(err.message || "Signup failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

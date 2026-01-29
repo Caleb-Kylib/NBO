@@ -1,24 +1,38 @@
+// src/pages/CategoryDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import BusinessCard from '../components/ui/BusinessCard';
-import { useAuth } from '../context/AuthContext';
-import { FiArrowLeft, FiFilter } from 'react-icons/fi';
+import { businessService } from '../services/businessService';
+import { FiArrowLeft, FiFilter, FiLoader } from 'react-icons/fi';
 
 const CategoryDetail = () => {
     const { categoryName } = useParams();
-    const { allBusinesses } = useAuth();
-    const [filteredBusinesses, setFilteredBusinesses] = useState([]);
+    const [businesses, setBusinesses] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [locationFilter, setLocationFilter] = useState('');
 
     useEffect(() => {
-        let results = allBusinesses.filter(b => b.category === categoryName);
+        const loadBusinesses = async () => {
+            try {
+                setIsLoading(true);
+                const { data } = await businessService.getBusinesses({
+                    category: categoryName,
+                    limit: 50 // Fetch a good amount for the category
+                });
+                setBusinesses(data);
+            } catch (err) {
+                console.error('Error loading category businesses:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-        if (locationFilter) {
-            results = results.filter(b => b.location.toLowerCase().includes(locationFilter.toLowerCase()));
-        }
+        loadBusinesses();
+    }, [categoryName]);
 
-        setFilteredBusinesses(results);
-    }, [categoryName, allBusinesses, locationFilter]);
+    const displayedBusinesses = businesses.filter(b =>
+        b.location.toLowerCase().includes(locationFilter.toLowerCase())
+    );
 
     return (
         <div className="min-h-screen bg-slate-50/50 pb-20">
@@ -59,9 +73,13 @@ const CategoryDetail = () => {
 
                     {/* Results */}
                     <main className="flex-grow">
-                        {filteredBusinesses.length > 0 ? (
+                        {isLoading ? (
+                            <div className="flex justify-center py-20">
+                                <FiLoader className="animate-spin text-blue-600" size={32} />
+                            </div>
+                        ) : displayedBusinesses.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {filteredBusinesses.map(business => (
+                                {displayedBusinesses.map(business => (
                                     <BusinessCard key={business.id} business={business} />
                                 ))}
                             </div>

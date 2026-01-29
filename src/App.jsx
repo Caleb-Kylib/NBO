@@ -33,9 +33,12 @@ const ScrollToTop = () => {
   return null;
 };
 
+import { Toaster } from 'react-hot-toast';
+
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-center" reverseOrder={false} />
       <ScrollToTop />
 
       <Routes>
@@ -44,7 +47,6 @@ function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:categoryName" element={<CategoryDetail />} />
-          <Route path="/business/:id" element={<BusinessProfile />} />
           <Route path="/business/profile/:id" element={<BusinessProfile />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 

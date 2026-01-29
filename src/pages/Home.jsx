@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/ui/SearchBar";
 import CategoryCard from "../components/ui/CategoryCard";
@@ -7,18 +7,31 @@ import BusinessCard from "../components/ui/BusinessCard";
 import { motion } from "framer-motion";
 import nairobiImg from "../assets/nairobi.jpg";
 import { categoryDefinitions } from "../data/categories";
-import { useAuth } from "../context/AuthContext";
+import { businessService } from "../services/businessService";
+import { FiLoader } from "react-icons/fi";
 
 const Home = () => {
-  const { allBusinesses } = useAuth();
-  // Show all 8 core categories on home page
+  const [featuredBusinesses, setFeaturedBusinesses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const categories = categoryDefinitions.map(cat => cat.name);
-  // Get one featured business per category for the home page
-  const featuredBusinesses = [...allBusinesses].reverse().slice(0, 6);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const { data } = await businessService.getBusinesses({ limit: 6 });
+        setFeaturedBusinesses(data);
+      } catch (err) {
+        console.error('Error fetching featured businesses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
 
   return (
     <div className="bg-white">
-
       {/* Hero Section */}
       <section
         className="relative text-white py-24 lg:py-40 bg-cover bg-center"
@@ -53,7 +66,6 @@ const Home = () => {
             <SearchBar className="shadow-2xl scale-110" />
           </motion.div>
 
-          {/* Popular Links */}
           <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base text-gray-300">
             <span className="font-semibold text-white">Popular:</span>
             <Link to="/categories/Pharmacy %26 Health Stores" className="hover:text-white transition-colors">Pharmacies</Link>
@@ -92,11 +104,17 @@ const Home = () => {
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">Handpicked top-rated establishments across Nairobi known for their quality and service.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredBusinesses.map(business => (
-              <BusinessCard key={business.id} business={business} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-10 text-blue-600">
+              <FiLoader className="animate-spin" size={40} />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredBusinesses.map(business => (
+                <BusinessCard key={business.id} business={business} />
+              ))}
+            </div>
+          )}
 
           <div className="mt-16 text-center">
             <Link to="/search" className="inline-block bg-blue-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl hover:-translate-y-1">
@@ -123,7 +141,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

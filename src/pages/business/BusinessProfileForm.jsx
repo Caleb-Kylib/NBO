@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiArrowRight, FiCheck, FiInfo, FiMapPin, FiBriefcase, FiType } from 'react-icons/fi';
+import { FiArrowLeft, FiArrowRight, FiCheck, FiInfo, FiMapPin, FiBriefcase, FiType, FiCamera, FiTrash2 } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 import BusinessLayout from '../../layouts/BusinessLayout';
 import SuccessModal from '../../components/ui/SuccessModal';
 import { useAuth } from '../../context/AuthContext';
+import { businessService } from '../../services/businessService';
 
 const BusinessProfileForm = ({ mode = 'create' }) => {
     const navigate = useNavigate();
-    const { businessData, saveBusinessProfile } = useAuth();
+    const { user, businessData, saveBusinessProfile } = useAuth();
     const [step, setStep] = useState(1);
-    const totalSteps = 4;
+    const totalSteps = 5;
 
     const [formData, setFormData] = useState({
         name: businessData?.name || '',
@@ -19,24 +21,89 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
         whatsapp: businessData?.whatsapp || '',
         location: businessData?.location || '',
         description: businessData?.description || '',
+        profile_image: businessData?.profile_image || businessData?.image || '',
     });
 
+    const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(formData.profile_image || '');
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [newBusinessId, setNewBusinessId] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const nextStep = () => setStep(prev => Math.min(prev + 1, totalSteps));
+    const nextStep = () => {
+        // Validation for each step
+        if (step === 1 && (!formData.name || !formData.category)) {
+            toast.error("Name and Category are required");
+            return;
+        }
+        if (step === 2 && !formData.phone) {
+            toast.error("Phone number is required");
+            return;
+        }
+        setStep(prev => Math.min(prev + 1, totalSteps));
+    };
+
     const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
 
-    const handleSubmit = (e) => {
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image too large. Max 5MB.");
+                return;
+            }
+            setImageFile(file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+
+    const removeImage = () => {
+        setImageFile(null);
+        setImagePreview('');
+        setFormData(prev => ({ ...prev, profile_image: '' }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const id = saveBusinessProfile(formData);
-        setNewBusinessId(id);
-        setShowSuccessModal(true);
+
+        if (!user) {
+            toast.error("You must be logged in to save a business profile");
+            navigate("/business/login");
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+
+            let profile_image = formData.profile_image;
+
+            // Upload new image if selected
+            if (imageFile) {
+                toast.loading("Uploading image...", { id: 'upload' });
+                profile_image = await businessService.uploadImage(imageFile, user.id);
+                toast.success("Image uploaded!", { id: 'upload' });
+            }
+
+            const submissionData = {
+                ...formData,
+                profile_image
+            };
+
+            const id = await saveBusinessProfile(submissionData);
+            setNewBusinessId(id);
+            toast.success(mode === 'edit' ? "Profile updated successfully!" : "Business profile created successfully!");
+            setShowSuccessModal(true);
+        } catch (err) {
+            console.error("Submission Error:", err);
+            toast.error(err.message || "Something went wrong. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const renderStep = () => {
@@ -50,8 +117,9 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                         </div>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Business Name</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Business Name *</label>
                                 <input
+                                    required
                                     type="text"
                                     name="name"
                                     value={formData.name}
@@ -61,8 +129,9 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Category</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Category *</label>
                                 <select
+                                    required
                                     name="category"
                                     value={formData.category}
                                     onChange={handleInputChange}
@@ -105,8 +174,9 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
+                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Phone Number *</label>
                                     <input
+                                        required
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
@@ -128,8 +198,9 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Business Location</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Business Location *</label>
                                 <input
+                                    required
                                     type="text"
                                     name="location"
                                     value={formData.location}
@@ -145,12 +216,51 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex items-center gap-3 mb-8 text-blue-600">
+                            <FiCamera size={24} />
+                            <h2 className="text-xl font-bold text-slate-900">Profile Image</h2>
+                        </div>
+                        <div className="space-y-4">
+                            <p className="text-sm text-slate-500 mb-4">Upload a photo to help your business stand out. If skipped, we'll use a category placeholder.</p>
+
+                            <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl p-8 hover:border-blue-400 transition-colors">
+                                {imagePreview ? (
+                                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg">
+                                        <img src={imagePreview} alt="Selected" className="w-full h-full object-cover" />
+                                        <button
+                                            type="button"
+                                            onClick={removeImage}
+                                            className="absolute top-4 right-4 bg-white/90 backdrop-blur p-3 rounded-xl text-rose-600 shadow-xl hover:bg-white"
+                                        >
+                                            <FiTrash2 size={20} />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <label className="flex flex-col items-center gap-4 cursor-pointer">
+                                        <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
+                                            <FiCamera size={32} />
+                                        </div>
+                                        <div className="text-center">
+                                            <p className="font-bold text-slate-900">Click to upload photo</p>
+                                            <p className="text-sm text-slate-400">PNG, JPG or WebP (max 5MB)</p>
+                                        </div>
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            case 4:
+                return (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center gap-3 mb-8 text-blue-600">
                             <FiInfo size={24} />
                             <h2 className="text-xl font-bold text-slate-900">Description</h2>
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">About your business</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">About your business *</label>
                             <textarea
+                                required
                                 name="description"
                                 value={formData.description}
                                 onChange={handleInputChange}
@@ -161,7 +271,7 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                         </div>
                     </div>
                 );
-            case 4:
+            case 5:
                 return (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex items-center gap-3 mb-4 text-emerald-600">
@@ -169,15 +279,22 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                             <h2 className="text-xl font-bold text-slate-900">Review & Submit</h2>
                         </div>
                         <div className="bg-slate-50 rounded-3xl p-8 space-y-6 border border-slate-100">
-                            <div className="grid grid-cols-2 gap-6">
-                                <div>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Business Name</p>
-                                    <p className="font-semibold text-slate-900">{formData.name || 'Not specified'}</p>
+                            <div className="flex items-center gap-6 mb-4">
+                                <div className="w-24 h-24 rounded-2xl overflow-hidden bg-slate-200 shadow-inner">
+                                    {imagePreview ? (
+                                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                            <FiBriefcase size={32} />
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Category</p>
-                                    <p className="font-semibold text-slate-900">{formData.category || 'Not specified'}</p>
+                                    <h4 className="text-xl font-bold text-slate-900">{formData.name || 'Your Business'}</h4>
+                                    <p className="text-slate-500">{formData.category || 'Category'}</p>
                                 </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200">
                                 <div>
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Location</p>
                                     <p className="font-semibold text-slate-900">{formData.location || 'Not specified'}</p>
@@ -208,7 +325,7 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                 }}
                 secondaryAction={{
                     label: "View Public Page",
-                    path: `/business/${newBusinessId || 'demo'}`
+                    path: `/business/profile/${newBusinessId || 'demo'}`
                 }}
                 autoRedirectDelay={3000}
             />
@@ -230,11 +347,24 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                     {renderStep()}
 
                     <div className="mt-12 flex justify-between border-t border-slate-50 pt-8">
-                        <button type="button" onClick={prevStep} disabled={step === 1} className={`font-bold ${step === 1 ? 'opacity-0' : 'text-slate-400'}`}>Previous</button>
+                        <button type="button" onClick={prevStep} disabled={step === 1} className={`font-bold transition-opacity ${step === 1 ? 'opacity-0' : 'text-slate-400 hover:text-slate-600'}`}>Previous</button>
                         {step < totalSteps ? (
-                            <button type="button" onClick={nextStep} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold">Next Step</button>
+                            <button type="button" onClick={nextStep} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-200">Next Step</button>
                         ) : (
-                            <button type="submit" className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold">Complete Setup</button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 min-w-[160px] hover:bg-blue-700 transition-all active:scale-95 shadow-xl shadow-blue-100"
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    'Complete Setup'
+                                )}
+                            </button>
                         )}
                     </div>
                 </form>

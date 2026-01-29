@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabaseClient";
 import nairobiImg from "../../assets/nairobi.jpg";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { loginBusiness, hasBusiness } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -20,31 +20,29 @@ const Login = () => {
         setError("");
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError("");
 
-        // Simulate network delay
-        setTimeout(() => {
-            const result = loginBusiness(formData.email, formData.password);
+        try {
+            const { error: loginError } = await supabase.auth.signInWithPassword({
+                email: formData.email,
+                password: formData.password
+            });
 
-            if (result.success) {
-                setIsLoading(false);
-                // Redirect logic based on business state
-                // This will also be handled by the route guard on mount, but good to do here too
-                navigate(hasBusiness ? "/business/dashboard" : "/business/create");
-            } else {
-                setIsLoading(false);
-                setError(result.message);
+            if (loginError) throw loginError;
 
-                // If no account, redirect to signup after a small delay
-                if (result.type === 'no_account') {
-                    setTimeout(() => {
-                        navigate("/business/signup", { state: { email: formData.email } });
-                    }, 2000);
-                }
-            }
-        }, 800);
+            toast.success("Welcome back!");
+            // Redirection will be handled by the context/guards automatically but we can force it
+            navigate("/business/dashboard");
+        } catch (err) {
+            console.error("Login Error:", err);
+            setError(err.message || "Incorrect email or password");
+            toast.error(err.message || "Login failed");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -66,13 +64,13 @@ const Login = () => {
                     <span className="font-semibold border-b-2 border-blue-400 pb-1">
                         Login
                     </span>
-                    <Link to="/business/signup" className="text-gray-300 hover:text-white transition-colors text-blue-400">
+                    <Link to="/business/signup" className="text-gray-300 hover:text-white transition-colors">
                         Register
                     </Link>
                 </div>
 
                 {error && (
-                    <div className={`p-3 rounded-lg text-sm mb-6 text-center animate-pulse ${error.includes('found') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}`}>
+                    <div className="p-3 rounded-lg text-sm mb-6 text-center bg-rose-500/20 text-rose-300 border border-rose-500/30">
                         {error}
                     </div>
                 )}
