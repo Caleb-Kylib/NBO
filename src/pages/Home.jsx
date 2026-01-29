@@ -6,14 +6,15 @@ import CategoryCard from "../components/ui/CategoryCard";
 import BusinessCard from "../components/ui/BusinessCard";
 import { motion } from "framer-motion";
 import nairobiImg from "../assets/nairobi.jpg";
-import { businesses } from "../data/businesses";
 import { categoryDefinitions } from "../data/categories";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
+  const { allBusinesses } = useAuth();
   // Show all 8 core categories on home page
   const categories = categoryDefinitions.map(cat => cat.name);
   // Get one featured business per category for the home page
-  const featuredBusinesses = businesses.filter((_, index) => index % 3 === 0).slice(0, 6);
+  const featuredBusinesses = [...allBusinesses].reverse().slice(0, 6);
 
   return (
     <div className="bg-white">
@@ -55,9 +56,9 @@ const Home = () => {
           {/* Popular Links */}
           <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base text-gray-300">
             <span className="font-semibold text-white">Popular:</span>
-            <Link to="/search?category=Pharmacy %26 Health Stores" className="hover:text-white transition-colors">Pharmacies</Link>
-            <Link to="/search?category=Restaurant" className="hover:text-white transition-colors">Restaurants</Link>
-            <Link to="/search?category=Bakeries" className="hover:text-white transition-colors">Bakeries</Link>
+            <Link to="/categories/Pharmacy %26 Health Stores" className="hover:text-white transition-colors">Pharmacies</Link>
+            <Link to="/categories/Restaurant" className="hover:text-white transition-colors">Restaurants</Link>
+            <Link to="/categories/Bakeries" className="hover:text-white transition-colors">Bakeries</Link>
           </div>
         </div>
       </section>

@@ -48,7 +48,7 @@ const CategoryCard = ({ category }) => {
 
     return (
         <Link
-            to={`/search?category=${encodeURIComponent(category)}`}
+            to={`/categories/${encodeURIComponent(category)}`}
             className={`flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 group hover:shadow-xl hover:-translate-y-1 ${borderHoverClasses}`}
         >
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:text-white group-hover:rotate-6 ${colorClasses}`}>

@@ -10,6 +10,7 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 import Categories from "./pages/Categories";
+import CategoryDetail from "./pages/CategoryDetail";
 import BusinessProfile from "./pages/BusinessProfile";
 
 // Auth pages
@@ -42,7 +43,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:categoryName" element={<CategoryDetail />} />
           <Route path="/business/:id" element={<BusinessProfile />} />
+          <Route path="/business/profile/:id" element={<BusinessProfile />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
           {/* 🔓 Public Auth Routes (Only accessible if logged out) */}

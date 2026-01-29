@@ -88,7 +88,7 @@ const Dashboard = () => {
                   Edit Profile
                 </Link>
                 <Link
-                  to="/business/profile/demo"
+                  to={`/business/profile/${businessData?.id}`}
                   className="p-4 bg-white border border-slate-200 text-slate-400 rounded-2xl hover:bg-slate-50 transition-all"
                 >
                   <FiArrowRight size={24} />

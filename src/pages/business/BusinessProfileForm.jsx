@@ -22,6 +22,7 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
     });
 
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [newBusinessId, setNewBusinessId] = useState(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -33,7 +34,8 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        saveBusinessProfile(formData);
+        const id = saveBusinessProfile(formData);
+        setNewBusinessId(id);
         setShowSuccessModal(true);
     };
 
@@ -70,7 +72,12 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                                     <option value="Restaurant">Restaurant</option>
                                     <option value="Cafe">Cafe</option>
                                     <option value="Beauty & Spa">Beauty & Spa</option>
-                                    <option value="Services">Services</option>
+                                    <option value="Pharmacy & Health Stores">Pharmacy & Health Stores</option>
+                                    <option value="Bakeries">Bakeries</option>
+                                    <option value="Butcheries">Butcheries</option>
+                                    <option value="Wine & Beverage Shops">Wine & Beverage Shops</option>
+                                    <option value="Bookshops">Bookshops</option>
+                                    <option value="Stationery & Office Supplies">Stationery & Office Supplies</option>
                                 </select>
                             </div>
                             <div>
@@ -201,7 +208,7 @@ const BusinessProfileForm = ({ mode = 'create' }) => {
                 }}
                 secondaryAction={{
                     label: "View Public Page",
-                    path: "/business/demo"
+                    path: `/business/${newBusinessId || 'demo'}`
                 }}
                 autoRedirectDelay={3000}
             />

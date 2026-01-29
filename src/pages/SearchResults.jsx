@@ -2,26 +2,29 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import BusinessCard from '../components/ui/BusinessCard';
-import { businesses } from '../data/businesses';
+import { useAuth } from '../context/AuthContext';
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams();
     const query = searchParams.get('q') || '';
     const categoryFilter = searchParams.get('category') || '';
 
+    const { allBusinesses } = useAuth();
     const [title, setTitle] = useState('All Businesses');
     const [filteredBusinesses, setFilteredBusinesses] = useState([]);
     const [filterVerified, setFilterVerified] = useState(false);
     const [locationFilter, setLocationFilter] = useState('');
 
     useEffect(() => {
-        let results = businesses;
+        let results = [...allBusinesses];
 
         if (query) {
             results = results.filter(b =>
                 b.name.toLowerCase().includes(query.toLowerCase()) ||
                 b.category.toLowerCase().includes(query.toLowerCase()) ||
-                b.services.some(s => s.toLowerCase().includes(query.toLowerCase()))
+                (Array.isArray(b.services)
+                    ? b.services.some(s => s.toLowerCase().includes(query.toLowerCase()))
+                    : b.services.toLowerCase().includes(query.toLowerCase()))
             );
             setTitle(`Results for "${query}"`);
         } else if (categoryFilter) {
@@ -40,7 +43,7 @@ const SearchResults = () => {
         }
 
         setFilteredBusinesses(results);
-    }, [query, categoryFilter, filterVerified, locationFilter]);
+    }, [query, categoryFilter, filterVerified, locationFilter, allBusinesses]);
 
     return (
         <div className="min-h-screen bg-gray-50 py-8">
