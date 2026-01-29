@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import BusinessCard from '../components/ui/BusinessCard';
-import mockBusinesses from '../data/mockBusinesses.json';
+import { businesses } from '../data/businesses';
 
 const SearchResults = () => {
     const [searchParams] = useSearchParams();
@@ -15,7 +15,7 @@ const SearchResults = () => {
     const [locationFilter, setLocationFilter] = useState('');
 
     useEffect(() => {
-        let results = mockBusinesses;
+        let results = businesses;
 
         if (query) {
             results = results.filter(b =>

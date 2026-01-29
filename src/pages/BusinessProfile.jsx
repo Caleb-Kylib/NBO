@@ -2,12 +2,12 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaPhone, FaWhatsapp, FaMapMarkerAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
-import mockBusinesses from '../data/mockBusinesses.json';
+import { businesses } from '../data/businesses';
 import TrustBadge from '../components/ui/TrustBadge';
 
 const BusinessProfile = () => {
     const { id } = useParams();
-    const business = mockBusinesses.find(b => b.id === id);
+    const business = businesses.find(b => b.id === id);
 
     if (!business) {
         return <div className="min-h-screen flex items-center justify-center">Business not found.</div>;
