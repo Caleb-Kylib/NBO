@@ -5,19 +5,46 @@ import nairobiImg from "../../assets/nairobi.jpg";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { loginBusiness } = useAuth();
+    const { loginBusiness, hasBusiness } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+
+    const handleInputChange = (e) => {
+        const { type, value } = e.target;
+        setFormData(prev => ({ ...prev, [type === 'email' ? 'email' : 'password']: value }));
+        setError("");
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Simulate API call
+        // Simulate network delay
         setTimeout(() => {
-            loginBusiness();
-            setIsLoading(false);
-            navigate("/business/dashboard");
-        }, 1000);
+            const result = loginBusiness(formData.email, formData.password);
+
+            if (result.success) {
+                setIsLoading(false);
+                // Redirect logic based on business state
+                // This will also be handled by the route guard on mount, but good to do here too
+                navigate(hasBusiness ? "/business/dashboard" : "/business/create");
+            } else {
+                setIsLoading(false);
+                setError(result.message);
+
+                // If no account, redirect to signup after a small delay
+                if (result.type === 'no_account') {
+                    setTimeout(() => {
+                        navigate("/business/signup", { state: { email: formData.email } });
+                    }, 2000);
+                }
+            }
+        }, 800);
     };
 
     return (
@@ -36,45 +63,49 @@ const Login = () => {
                 </p>
 
                 <div className="flex justify-center gap-6 text-sm mb-6">
-                    <span className="font-semibold border-b-2 border-green-400 pb-1">
+                    <span className="font-semibold border-b-2 border-blue-400 pb-1">
                         Login
                     </span>
-                    <Link to="/business/signup" className="text-gray-300 hover:text-white transition-colors">
+                    <Link to="/business/signup" className="text-gray-300 hover:text-white transition-colors text-blue-400">
                         Register
                     </Link>
                 </div>
+
+                {error && (
+                    <div className={`p-3 rounded-lg text-sm mb-6 text-center animate-pulse ${error.includes('found') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'}`}>
+                        {error}
+                    </div>
+                )}
 
                 <form className="space-y-4" onSubmit={handleLogin}>
                     <input
                         required
                         type="email"
                         placeholder="Business Email"
-                        className="w-full bg-white/20 border border-white/30 rounded-md px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                        onChange={handleInputChange}
+                        className="w-full bg-white/20 border border-white/30 rounded-md px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
 
                     <input
                         required
                         type="password"
                         placeholder="Password"
-                        className="w-full bg-white/20 border border-white/30 rounded-md px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                        onChange={handleInputChange}
+                        className="w-full bg-white/20 border border-white/30 rounded-md px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
-
-                    <div className="flex items-center justify-between text-sm text-gray-300">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" className="rounded bg-white/20" />
-                            Remember me
-                        </label>
-                        <Link to="#" className="hover:text-green-400 transition-colors">
-                            Forgot password?
-                        </Link>
-                    </div>
 
                     <button
                         disabled={isLoading}
-                        className={`w-full bg-green-500 text-black py-3 rounded-md font-semibold hover:bg-green-600 transition flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        className={`w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
                         {isLoading ? 'Logging in...' : 'Login →'}
                     </button>
+
+                    <div className="text-center mt-4">
+                        <Link to="/business/signup" className="text-xs text-blue-300 hover:text-white underline decoration-blue-300/50">
+                            Don't have an account? Create one for free
+                        </Link>
+                    </div>
                 </form>
             </div>
         </div>

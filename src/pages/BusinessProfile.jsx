@@ -4,9 +4,11 @@ import { useParams, Link } from 'react-router-dom';
 import { FaPhone, FaWhatsapp, FaMapMarkerAlt, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { businesses } from '../data/businesses';
 import TrustBadge from '../components/ui/TrustBadge';
+import { useAuth } from '../context/AuthContext';
 
 const BusinessProfile = () => {
     const { id } = useParams();
+    const { isBusinessLoggedIn } = useAuth();
     const business = businesses.find(b => b.id === id);
 
     if (!business) {
@@ -14,8 +16,29 @@ const BusinessProfile = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="container mx-auto px-4 max-w-5xl">
+        <div className="min-h-screen bg-gray-50 pb-20">
+            {/* Owner Context Banner */}
+            {isBusinessLoggedIn && (
+                <div className="bg-blue-600 text-white py-3 px-4 shadow-sm relative z-10">
+                    <div className="container mx-auto max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                                <FaCheckCircle className="text-white" />
+                            </div>
+                            <span className="text-sm font-medium">This is how customers see your business profile</span>
+                        </div>
+                        {business.trustStatus !== 'verified' && (
+                            <Link
+                                to="/business/verification"
+                                className="bg-white text-blue-600 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-all flex items-center gap-2"
+                            >
+                                <FaCheckCircle /> Verify your business to build trust
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            )}
+            <div className="container mx-auto px-4 max-w-5xl pt-8">
                 {/* Header Card */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                     <div className="h-64 bg-gray-200 relative">
