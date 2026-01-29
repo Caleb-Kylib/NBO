@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { AuthProvider } from "./context/AuthContext";
+import BusinessPrivateRoute from "./components/auth/BusinessPrivateRoute";
 
 // Layouts
-import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
 
 // Pages
@@ -32,27 +32,29 @@ const ScrollToTop = () => {
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <ScrollToTop />
 
       <Routes>
-        {/* ❌ NO navbar & footer */}
-        <Route element={<AuthLayout />}>
-          <Route path="/business/login" element={<Login />} />
-          <Route path="/business/signup" element={<Signup />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-        </Route>
-
-        {/* ✅ Navbar & footer on ALL other pages */}
+        {/* ✅ All pages now have Navbar & Footer as requested */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/business/:id" element={<BusinessProfile />} />
-          <Route path="/business/dashboard" element={<Dashboard />} />
+
+          {/* Public Auth Routes */}
+          <Route path="/business/login" element={<Login />} />
+          <Route path="/business/signup" element={<Signup />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          {/* 🔒 Protected Business Routes */}
+          <Route element={<BusinessPrivateRoute />}>
+            <Route path="/business/dashboard" element={<Dashboard />} />
+          </Route>
         </Route>
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

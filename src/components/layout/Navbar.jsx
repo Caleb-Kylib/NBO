@@ -1,13 +1,20 @@
 // src/components/layout/Navbar.jsx
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
+import { FiMenu, FiX } from 'react-icons/fi';
 import SearchBar from '../ui/SearchBar';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
+    const { isBusinessLoggedIn, logoutBusiness } = useAuth();
     const isHomePage = location.pathname === '/';
+
+    const handleLogout = () => {
+        logoutBusiness();
+        setIsOpen(false);
+    };
 
     return (
         <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -26,15 +33,27 @@ const Navbar = () => {
                     </div>
 
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link to="//business/login" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</Link>
+                        <Link to="/" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</Link>
                         <Link to="/categories" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Categories</Link>
                         <Link to="/search" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Explore</Link>
-                        <Link to="/business/login">
-                            <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow">
-                                List Business
-                            </button>
-                        </Link>
 
+                        {isBusinessLoggedIn ? (
+                            <>
+                                <Link to="/business/dashboard" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Dashboard</Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="border border-red-200 text-red-600 px-5 py-2 rounded-full font-medium hover:bg-red-50 transition-colors"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <Link to="/business/login">
+                                <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow">
+                                    List Business
+                                </button>
+                            </Link>
+                        )}
                     </div>
 
                     <div className="md:hidden flex items-center">
@@ -49,23 +68,43 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden bg-white border-t border-gray-100">
                     <div className="px-4 pt-2 pb-4 space-y-1">
-                        <div className="mb-4 mt-2">
-                            <SearchBar />
-                        </div>
+                        {!isHomePage && (
+                            <div className="mb-4 mt-2">
+                                <SearchBar />
+                            </div>
+                        )}
                         <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Home</Link>
                         <Link to="/categories" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Categories</Link>
                         <Link to="/search" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Explore</Link>
-                        <div className="pt-4">
-                            <Link
-                                to="/business/login"
-                                onClick={() => setIsOpen(false)}
-                                className="block"
-                            >
-                                <button className="w-full bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                                    List Your Business
-                                </button>
-                            </Link>
 
+                        <div className="pt-4 border-t border-gray-100 mt-4">
+                            {isBusinessLoggedIn ? (
+                                <div className="space-y-2">
+                                    <Link
+                                        to="/business/dashboard"
+                                        onClick={() => setIsOpen(false)}
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <Link
+                                    to="/business/login"
+                                    onClick={() => setIsOpen(false)}
+                                    className="block"
+                                >
+                                    <button className="w-full bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                        List Your Business
+                                    </button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
