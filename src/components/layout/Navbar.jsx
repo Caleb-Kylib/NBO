@@ -29,9 +29,12 @@ const Navbar = () => {
                         <Link to="//business/login" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Home</Link>
                         <Link to="/categories" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Categories</Link>
                         <Link to="/search" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">Explore</Link>
-                        <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow">
-                            List Business
-                        </button>
+                        <Link to="/business/login">
+                            <button className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow">
+                                List Business
+                            </button>
+                        </Link>
+
                     </div>
 
                     <div className="md:hidden flex items-center">
@@ -53,9 +56,16 @@ const Navbar = () => {
                         <Link to="/categories" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Categories</Link>
                         <Link to="/search" onClick={() => setIsOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">Explore</Link>
                         <div className="pt-4">
-                            <button className="w-full bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                                List Your Business
-                            </button>
+                            <Link
+                                to="/business/login"
+                                onClick={() => setIsOpen(false)}
+                                className="block"
+                            >
+                                <button className="w-full bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                    List Your Business
+                                </button>
+                            </Link>
+
                         </div>
                     </div>
                 </div>
